@@ -22,6 +22,7 @@ const correctCase = (str: string) => {
 
 const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
   const options_cols = Object.keys(options)
+  const tries = useRef(0);
   // these states array contains each box top and left value at 0 and 1 index
   const [box_1, setBox1] = useState(createInitialState())
   const [box_2, setBox2] = useState(createInitialState())
@@ -33,6 +34,7 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
 
   // gets an array with top and left values and the box number for updating at 0, 1, 2 index
   const handleBoxClick = (pos: number[]) => {
+    tries.current++
     const tempBox = pos[2] === 1 ? [...box_1] : pos[2] === 2 ? [...box_2] : [...box_3];
     prevState.current.push({
       lastUpdatedBox: pos[2],
@@ -88,40 +90,47 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
     box_1.forEach((ele, i) => {
       if (ele.includes(2)) {
         ans.forEach(a => {
-          if(a[options_cols[0]]===options[options_cols[0]][ele.indexOf(2)] && a[options_cols[2]]===options[options_cols[2]][i]) count++
+          if(a[options_cols[0] as keyof typeof a]===options[options_cols[0]][ele.indexOf(2)] && a[options_cols[2] as keyof typeof a]===options[options_cols[2] as keyof typeof a][i]) count++
         })
       }
     })
     box_2.forEach((ele, i) => {
       if (ele.includes(2)) {
         ans.forEach(a => {
-          if(a[options_cols[0]]===options[options_cols[0]][ele.indexOf(2)] && a[options_cols[2]]===options[options_cols[2]][i]) count++
+          if(a[options_cols[1] as keyof typeof a]===options[options_cols[1]][ele.indexOf(2)] && a[options_cols[2] as keyof typeof a]===options[options_cols[2]][i]) count++
         })
       }
     })
     box_3.forEach((ele, i) => {
       if (ele.includes(2)) {
         ans.forEach(a => {
-          if(a[options_cols[0]]===options[options_cols[0]][ele.indexOf(2)] && a[options_cols[2]]===options[options_cols[2]][i]) count++
+          if(a[options_cols[0] as keyof typeof a]===options[options_cols[0]][ele.indexOf(2)] && a[options_cols[1] as keyof typeof a]===options[options_cols[1]][i]) count++
         })
       }
     })
     count==12 ? setAlert(2) : count>=0 ? setAlert(1) : ''
   }
+  //check if all the boxes are marked either wrong or tick if yes checkAns on each box update
   useEffect(() => {
     let flag = true
     box_1.forEach(ele=>{
-      if(ele.includes(0)) flag = false
+      if(!ele.includes(2)) flag = false
     })
     box_2.forEach(ele=>{
-      if(ele.includes(0)) flag = false
+      if(!ele.includes(2)) flag = false
     })
     box_3.forEach(ele=>{
-      if(ele.includes(0)) flag = false
+      if(!ele.includes(2)) flag = false
     })
     if(flag)
       checkAns()
   }, [box_1, box_2, box_3])
+
+  const calculateScore = (tr:number) => {
+    const maxScore = 100, penalty = 2
+    const x = tr / 2
+    return maxScore - (x-12) * penalty
+  }
   return (
     <>
       <div className="w-[35vw] gap-1 grid grid-cols-[1fr,1fr,1fr]">
@@ -160,9 +169,9 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
               {ele.map((el, j) => {
                 return <button className="bg-white border-slate-300 rounded-none px-2 py-0 min-h-[2.5em]" onClick={() => handleBoxClick([i, j, 1])}>
                   {(el === 2)
-                    ? <IoMdCheckmark size='1.5em' />
+                    ? <IoMdCheckmark size='1.5em' className='bg-green-400' color='white'/>
                     : (el === 1)
-                      ? <IoClose size='1.5em' /> : ''}
+                      ? <IoClose className='bg-red-400' color='white' size='1.5em' /> : ''}
                 </button>
               })}
             </>
@@ -175,9 +184,9 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
               {ele.map((el, j) => {
                 return <button className="bg-white border-slate-300 rounded-none px-2 py-0 min-h-[2.5em]" onClick={() => handleBoxClick([i, j, 2])}>
                   {(el === 2)
-                    ? <IoMdCheckmark size='1.5em' />
+                    ? <IoMdCheckmark className='bg-green-400' color='white' size='1.5em' />
                     : (el === 1)
-                      ? <IoClose size='1.5em' /> : ''}
+                      ? <IoClose className='bg-red-400' color='white' size='1.5em' /> : ''}
                 </button>
               })}
             </>
@@ -199,9 +208,9 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
               {ele.map((el, j) => {
                 return <button className="bg-white border-slate-300 rounded-none px-2 py-0 min-h-[2.5em]" onClick={() => handleBoxClick([i, j, 3])}>
                   {(el === 2)
-                    ? <IoMdCheckmark size='1.5em' />
+                    ? <IoMdCheckmark size='1.5em' className='bg-green-400' color='white'/>
                     : (el === 1)
-                      ? <IoClose size='1.5em' /> : ''}
+                      ? <IoClose size='1.5em' className='bg-red-400' color='white'/> : ''}
                 </button>
               })}
             </>
@@ -213,7 +222,7 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
         <button disabled={prevState.current.length === 0} onClick={undo} className={`${prevState.current.length === 0 ? 'hover:cursor-not-allowed' : ''} bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500`}>Undo</button>
         <button onClick={reset} className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500'>Start Over</button>
       </div>
-      <AlertComp showAlert={alert == 1 || alert == 2 || alert == 3} status={alert} setShowAlert={setAlert} />
+      <AlertComp score={calculateScore(tries.current)} showAlert={alert == 1 || alert == 2 || alert == 3} status={alert} setShowAlert={setAlert} />
     </>
   )
 }

@@ -1,0 +1,41 @@
+{
+    "title": "Backstory and Goal",
+    "desc": "Mona sold a number of rare baseball cards at her auction house today. Each featured a different player and came out in a different year. No two cards sold for the same price, or featured people who played the same position. Using only the clues below, match each card to its price, year and player, and determine the player's position.",
+    "hints": [
+        "Daryn Drake's one sold for 50 dollars more than the 1999 item.",
+        "The card that sold for $175 came out in 2015.",
+        "Irv Ingram's card sold for $175",
+        "The 1999 item sold for 100 dollars more than 1987 item.",
+        "The 1999 one, Irv Ingram's card and Eric Estrada's card were all diffrent cards."
+    ],
+    "options": {
+      "players": [
+            "Daryn Drake",
+            "Eric Estrada",
+            "Irv Ingram",
+            "Neddy Norris"
+        ],
+      "years": [
+            "1987",
+            "1999",
+            "2004",
+            "2015"
+        ],
+      "price": [
+            "$125",
+            "$175",
+            "$225",
+            "$275"
+        ]
+    },
+    "ans": [
+        { "players": "Daryn Drake", "years": "1987", "price": "$125"
+        },
+        { "players": "Eric Estrada", "years": "1999", "price": "$175"
+        },
+        { "players": "Irv Ingram", "years": "2004", "price": "$225"
+        },
+        { "players": "Neddy Norris", "years": "2015", "price": "$275"
+        }
+    ]
+}
