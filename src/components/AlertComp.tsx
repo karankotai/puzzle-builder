@@ -42,15 +42,15 @@ const AlertComp = ({status,showAlert,setShowAlert}:AlertCompProps) => {
                     </div>
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <Dialog.Title className="text-base font-semibold flex items-center justify-center leading-6 text-gray-900">
-                        {status==1 ? "Wrong Solution" : status==2 ? "Correct Ans 🥳" : status==3 ? "Only one box can be marked TRUE in any row or column. Remove the existing true value before setting the new one.": "Unexpected Error"}
+                        {status==1 ? "Wrong Solution 🥺. Try Again!!" : status==2 ? "Correct Ans 🥳. You are a Genius!!" : status==3 ? "Only one box can be marked TRUE in any row or column.":''}
                       </Dialog.Title>
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <div className="bg-gray-500 px-4 py-1 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
-                    className={`inline-flex w-full justify-center rounded-md bg-white hover:bg-slate-400 px-3 py-2 text-sm font-semibold text-black shadow-sm sm:ml-3 sm:w-auto`}
+                    className={`inline-flex w-full justify-center rounded-md bg-white hover:bg-black px-3 py-2 text-sm font-semibold text-black hover:text-white shadow-sm sm:ml-3 sm:w-auto`}
                     onClick={() => setShowAlert(0)}
                   >
                     OK

@@ -16,10 +16,10 @@ const problem = {
     class_time: ["8:00", "9:00", "10:00", "11:00"],
   },
   ans: [
-    { teacher: "Aditya", class_time: "8:00", course: "Probablity" },
-    { teacher: "Basil", class_time: "11:00", course: "Geometry" },
-    { teacher: "Cecilia", class_time: "9:00", course: "Calculus" },
-    { teacher: "Dimitri", class_time: "10:00", course: "Algebra" },
+    { teacher: "Aditya", course: "Probablity", class_time: "8:00" },
+    { teacher: "Basil", course: "Geometry", class_time: "11:00" },
+    { teacher: "Cecilia", course: "Calculus", class_time: "9:00" },
+    { teacher: "Dimitri", course: "Algebra", class_time: "10:00" },
   ]
 }
 

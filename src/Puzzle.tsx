@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { IoMdCheckmark } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import AlertComp from './components/AlertComp';
@@ -44,6 +44,7 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
     else if (tempBox[pos[0]][pos[1]] === 1) {
       if (checkRC(tempBox, pos[0], pos[1])) {
         setAlert(3)
+        return
       } else {
         tempBox[pos[0]].fill(1)
         for (let i = 0; i < 4; i++) {
@@ -81,9 +82,46 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
     setBox2(createInitialState())
     setBox3(createInitialState())
   }
+  //comapre ans by iterating over each box and matching with respective properties in ans
   const checkAns = () => {
-    
+    let count = 0
+    box_1.forEach((ele, i) => {
+      if (ele.includes(2)) {
+        ans.forEach(a => {
+          if(a[options_cols[0]]===options[options_cols[0]][ele.indexOf(2)] && a[options_cols[2]]===options[options_cols[2]][i]) count++
+        })
+      }
+    })
+    box_2.forEach((ele, i) => {
+      if (ele.includes(2)) {
+        ans.forEach(a => {
+          if(a[options_cols[0]]===options[options_cols[0]][ele.indexOf(2)] && a[options_cols[2]]===options[options_cols[2]][i]) count++
+        })
+      }
+    })
+    box_3.forEach((ele, i) => {
+      if (ele.includes(2)) {
+        ans.forEach(a => {
+          if(a[options_cols[0]]===options[options_cols[0]][ele.indexOf(2)] && a[options_cols[2]]===options[options_cols[2]][i]) count++
+        })
+      }
+    })
+    count==12 ? setAlert(2) : count>=0 ? setAlert(1) : ''
   }
+  useEffect(() => {
+    let flag = true
+    box_1.forEach(ele=>{
+      if(ele.includes(0)) flag = false
+    })
+    box_2.forEach(ele=>{
+      if(ele.includes(0)) flag = false
+    })
+    box_3.forEach(ele=>{
+      if(ele.includes(0)) flag = false
+    })
+    if(flag)
+      checkAns()
+  }, [box_1, box_2, box_3])
   return (
     <>
       <div className="w-[35vw] gap-1 grid grid-cols-[1fr,1fr,1fr]">
@@ -175,7 +213,7 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
         <button disabled={prevState.current.length === 0} onClick={undo} className={`${prevState.current.length === 0 ? 'hover:cursor-not-allowed' : ''} bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500`}>Undo</button>
         <button onClick={reset} className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500'>Start Over</button>
       </div>
-      <AlertComp showAlert={alert==1 || alert==2 || alert==3} status={alert} setShowAlert={setAlert} />
+      <AlertComp showAlert={alert == 1 || alert == 2 || alert == 3} status={alert} setShowAlert={setAlert} />
     </>
   )
 }
