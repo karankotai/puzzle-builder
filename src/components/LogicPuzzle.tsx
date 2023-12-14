@@ -1,9 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Puzzle from './Puzzle'
-import problem from "./assets/problem.json"
+import { useParams } from 'react-router'
 
+const problemSchema = {
+  title: "",
+  desc: "",
+  hints: [],
+  options: {},
+  ans: []
+}
 const LogicPuzzle = () => {
   const [showHints, setShowHints] = useState(false)
+  const { num } = useParams()
+  const [problem,setProblem] = useState(problemSchema)
+  const getProblem = async() => {
+    const promise = await import(`../assets/problem${num}.json`)
+    console.log(promise)
+    setProblem(promise)
+  }
+  console.log(num)
+  useEffect(() => {
+    console.log('here')
+    getProblem()
+  }, [pnum])
   return (
     <div className="p-[2em] items-center text-center bg-cyan-50 border-[10px] h-[100vh] border-slate-400 flex">
       <div className='w-[45%] h-full pt-[6%] mr-5 pr-8 border-r-2 border-black'>

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { IoMdCheckmark } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
-import AlertComp from './components/AlertComp';
+import AlertComp from './AlertComp';
+import ResetComp from './ResetComp';
 
 interface PuzzleProps {
   options: Record<string, Array<string>>,
@@ -80,11 +81,16 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
     }
   }
   const reset = () => {
+    setConfirmReset(false)
+    setWrong(0)
+    tries.current = 0
     setBox1(createInitialState())
     setBox2(createInitialState())
     setBox3(createInitialState())
   }
+  const [confirmReset,setConfirmReset] = useState(false)
   //comapre ans by iterating over each box and matching with respective properties in ans
+  const [wrong,setWrong] = useState(0)
   const checkAns = () => {
     let count = 0
     box_1.forEach((ele, i) => {
@@ -108,6 +114,7 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
         })
       }
     })
+    setWrong(12-count)
     count==12 ? setAlert(2) : count>=0 ? setAlert(1) : ''
   }
   //check if all the boxes are marked either wrong or tick if yes checkAns on each box update
@@ -129,7 +136,7 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
   const calculateScore = (tr:number) => {
     const maxScore = 100, penalty = 2
     const x = tr / 2
-    return maxScore - (x-12) * penalty
+    return maxScore - (x-12) * penalty - wrong*6
   }
   return (
     <>
@@ -219,10 +226,12 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
       </div>
       <div className='mt-10 flex justify-around w-[80%] items-center m-auto'>
         <button className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500' onClick={() => setShowHints(prev => !prev)}>Hint</button>
+        <button className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500' onClick={checkAns}>Help</button>
         <button disabled={prevState.current.length === 0} onClick={undo} className={`${prevState.current.length === 0 ? 'hover:cursor-not-allowed' : ''} bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500`}>Undo</button>
-        <button onClick={reset} className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500'>Start Over</button>
+        <button onClick={()=>setConfirmReset(true)} className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500'>Start Over</button>
       </div>
       <AlertComp score={calculateScore(tries.current)} showAlert={alert == 1 || alert == 2 || alert == 3} status={alert} setShowAlert={setAlert} />
+      <ResetComp reset={reset} confirmReset={confirmReset} setConfirmReset={setConfirmReset} />
     </>
   )
 }
