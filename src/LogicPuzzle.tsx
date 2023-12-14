@@ -38,7 +38,7 @@ const LogicPuzzle = () => {
         <hr className="border-1 my-5 border-black" />
       </div>
       <div className='m-auto'>
-        <Puzzle options={problem.options} ans={problem.ans} />
+        <Puzzle options={problem.options} setShowHints={setShowHints} ans={problem.ans} />
       </div>
     </div>
   )
