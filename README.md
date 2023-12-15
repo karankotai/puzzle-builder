@@ -1,8 +1,8 @@
-# Puzzle-builder
+# Puzzle-For-The-Day
 
 ![image](https://github.com/karnking/puzzle-builder/assets/68837552/6502c32a-ba8a-4373-b16b-95e1d73c4ce9)
 
-A Logic Puzzle Solver built with React, TypeScript, and Tailwind CSS. Puzzle data is sourced from https://logic.puzzlebaron.com.
+A Logic Puzzle Solver built with React, Vite, TypeScript, and Tailwind CSS. Puzzle data is sourced from https://logic.puzzlebaron.com.
 
 ## Live at :
 https://puzzle-builder-ten.vercel.app/
@@ -15,6 +15,7 @@ This web application allows users to solve logic puzzles with various stories. P
 - **Dynamic Puzzle Loading:** Fetch puzzle data based on the selected problem.
 - **Interactive Interface:** View puzzle descriptions, toggle hints, and input your solutions.
 - **Built with React and TypeScript:** Utilizes modern web technologies for a robust and type-safe codebase.
+- **Vite framework:** used for better and fast dev experience.
 - **Styled with Tailwind CSS:** Responsive and visually appealing design.
 
 ## Getting Started
@@ -32,3 +33,15 @@ This web application allows users to solve logic puzzles with various stories. P
    npm start 
   Open http://localhost:3000 in your browser.
    
+## Flow
+
+```mermaid
+graph TD;
+ App-->HomePage
+HomePage-->Problem1
+HomePage-->Problem2
+HomePage-->Problem3
+HomePage-->Problem4
+HomePage-->Problem5
+```
+
