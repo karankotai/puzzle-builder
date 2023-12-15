@@ -3,6 +3,7 @@ import { IoMdCheckmark } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import AlertComp from './AlertComp';
 import ResetComp from './ResetComp';
+import EndProblemConfirm from './EndProblemConfirm';
 
 interface PuzzleProps {
   options: Record<string, Array<string>>,
@@ -82,16 +83,17 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
   }
   const reset = () => {
     setConfirmReset(false)
-    setWrong(0)
+    setRight(0)
     tries.current = 0
     setBox1(createInitialState())
     setBox2(createInitialState())
     setBox3(createInitialState())
   }
   const [confirmReset,setConfirmReset] = useState(false)
+  const [confirmEnd,setConfirmEnd] = useState(false)
   //comapre ans by iterating over each box and matching with respective properties in ans
-  const [wrong,setWrong] = useState(0)
-  const checkAns = () => {
+  const [right,setRight] = useState(0)
+  const checkAns = (end:boolean=false) => {
     let count = 0
     box_1.forEach((ele, i) => {
       if (ele.includes(2)) {
@@ -114,8 +116,8 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
         })
       }
     })
-    setWrong(12-count)
-    count==12 ? setAlert(2) : count>=0 ? setAlert(1) : ''
+    setRight(count)
+    count==12 ? setAlert(2) : end ? setAlert(4) : count>=0 ? setAlert(1) : console.log('ok')
   }
   //check if all the boxes are marked either wrong or tick if yes checkAns on each box update
   useEffect(() => {
@@ -134,9 +136,10 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
   }, [box_1, box_2, box_3])
 
   const calculateScore = (tr:number) => {
-    const maxScore = 100, penalty = 2
+    const penalty = 2
     const x = tr / 2
-    return maxScore - (x-12) * penalty - wrong*6
+    console.log(right,x,penalty)
+    return right*10 - (Math.abs(x-12))*penalty
   }
   return (
     <>
@@ -225,13 +228,14 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
         </div>
       </div>
       <div className='mt-10 flex justify-around w-[80%] items-center m-auto'>
+        <button className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500' onClick={()=>setConfirmEnd(true)}>End</button>
         <button className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500' onClick={() => setShowHints(prev => !prev)}>Hint</button>
-        <button className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500' onClick={checkAns}>Help</button>
         <button disabled={prevState.current.length === 0} onClick={undo} className={`${prevState.current.length === 0 ? 'hover:cursor-not-allowed' : ''} bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500`}>Undo</button>
         <button onClick={()=>setConfirmReset(true)} className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500'>Start Over</button>
       </div>
-      <AlertComp score={calculateScore(tries.current)} showAlert={alert == 1 || alert == 2 || alert == 3} status={alert} setShowAlert={setAlert} />
+      <AlertComp score={calculateScore(tries.current)} ans={ans} showAlert={alert == 1 || alert == 2 || alert == 3 || alert==4} status={alert} setShowAlert={setAlert} />
       <ResetComp reset={reset} confirmReset={confirmReset} setConfirmReset={setConfirmReset} />
+      <EndProblemConfirm checkAns={checkAns} confirmEnd={confirmEnd} setConfirmEnd={setConfirmEnd} />
     </>
   )
 }

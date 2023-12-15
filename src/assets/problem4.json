@@ -1,0 +1,40 @@
+{
+    "title": "3-D Printer",
+    "desc": "Piper Hills Academy recently installed a high-speed 3-D printer in its technology lab, and several students were given an opportunity this week to use it in order to print items of their own design. Using only the clues below, match each student to the item they created (and its color), and determine how long it took for each item to print.",
+    "hints": [
+        "Irma's design took 10 more minutes to print than the whistle.",
+        "Gary's design was the skull.",
+        "Ollie's piece was the phone case.",
+        "Ollie's piece took somewhat more minutes to print than Irma's piece."
+    ],
+    "options": {
+      "students": [
+            "Gary",
+            "Irma",
+            "Kyle",
+            "Ollie"
+        ],
+      "items": [
+            "cup",
+            "phone case",
+            "skull",
+            "whistle"
+        ],
+      "times": [
+            "10 minutes",
+            "15 minutes",
+            "20 minutes",
+            "25 minutes"
+        ]
+    },
+    "ans": [
+        { "students": "Gary", "items": "skull", "times": "15 minutes"
+        },
+        { "students": "Irma", "items": "cup", "times": "20 minutes"
+        },
+        { "students": "Kyle", "items": "whistle", "times": "10 minutes"
+        },
+        { "students": "Ollie", "items": "phone case", "times": "25 minutes"
+        }
+    ]
+}
