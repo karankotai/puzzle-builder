@@ -8,19 +8,19 @@
         "Calculus is two hours after geometry"
     ],
     "options": {
-      "teacher": [
+        "teacher": [
             "Aditya",
             "Basil",
             "Cecilia",
             "Dimitri"
         ],
-      "course": [
+        "course": [
             "Probablity",
             "Geometry",
             "Calculus",
             "Algebra"
         ],
-      "class_time": [
+        "class_time": [
             "8:00",
             "9:00",
             "10:00",
@@ -28,13 +28,25 @@
         ]
     },
     "ans": [
-        { "teacher": "Aditya", "course": "Probablity", "class_time": "8:00"
+        {
+            "teacher": "Aditya",
+            "course": "Probablity",
+            "class_time": "8:00"
         },
-        { "teacher": "Basil", "course": "Geometry", "class_time": "11:00"
+        {
+            "teacher": "Basil",
+            "course": "Geometry",
+            "class_time": "11:00"
         },
-        { "teacher": "Cecilia", "course": "Calculus", "class_time": "9:00"
+        {
+            "teacher": "Cecilia",
+            "course": "Calculus",
+            "class_time": "9:00"
         },
-        { "teacher": "Dimitri", "course": "Algebra", "class_time": "10:00"
+        {
+            "teacher": "Dimitri",
+            "course": "Algebra",
+            "class_time": "10:00"
         }
     ]
 }

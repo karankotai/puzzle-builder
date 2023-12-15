@@ -65,9 +65,9 @@ const AlertComp = ({ score, status, showAlert, ans, setShowAlert }: AlertCompPro
                       <tbody>
                         {ans.map(ele => {
                           return <tr>
-                            <td className='border border-black p-1'>{ele[keys[0]]}</td>
-                            <td className='border border-black p-1'>{ele[keys[1]]}</td>
-                            <td className='border border-black p-1'>{ele[keys[2]]}</td>
+                            <td className='border border-black p-1'>{ele[keys[0] as keyof typeof ele]}</td>
+                            <td className='border border-black p-1'>{ele[keys[1] as keyof typeof ele]}</td>
+                            <td className='border border-black p-1'>{ele[keys[2] as keyof typeof ele]}</td>
                           </tr>
                         })}
                       </tbody>
