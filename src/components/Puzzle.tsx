@@ -8,6 +8,7 @@ import EndProblemConfirm from './EndProblemConfirm';
 interface PuzzleProps {
   options: Record<string, Array<string>>,
   ans: Array<object>,
+  correctArray: number[][][],
   setShowHints: React.Dispatch<React.SetStateAction<boolean>>;
 }
 //empty boxes template
@@ -22,7 +23,7 @@ const correctCase = (str: string) => {
   return str
 }
 
-const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
+const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
   const options_cols = Object.keys(options)
   const tries = useRef(0);
   // these states array contains each box top and left value at 0 and 1 index
@@ -31,11 +32,12 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
   const [box_3, setBox3] = useState(createInitialState())
   // for alert component storing status code 0 is not show , 1 is puzzle wrong sol, 2 is puzzle correct sol, 3 is warning
   const [alert, setAlert] = useState(0)
-  // prev state stack to store object of undo box number and box prev state 
+  // prev state stack to store object of undo box  number and box prev state 
   const prevState = useRef<{ lastUpdatedBox: number; box: number[][] }[]>([]);
 
   // gets an array with top and left values and the box number for updating at 0, 1, 2 index
   const handleBoxClick = (pos: number[]) => {
+    removeError()
     tries.current++
     const tempBox = pos[2] === 1 ? [...box_1] : pos[2] === 2 ? [...box_2] : [...box_3];
     prevState.current.push({
@@ -89,57 +91,67 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
     setBox2(createInitialState())
     setBox3(createInitialState())
   }
-  const [confirmReset,setConfirmReset] = useState(false)
-  const [confirmEnd,setConfirmEnd] = useState(false)
-  //comapre ans by iterating over each box and matching with respective properties in ans
-  const [right,setRight] = useState(0)
-  const checkAns = (end:boolean=false) => {
-    let count = 0
-    box_1.forEach((ele, i) => {
-      if (ele.includes(2)) {
-        ans.forEach(a => {
-          if(a[options_cols[0] as keyof typeof a]===options[options_cols[0]][ele.indexOf(2)] && a[options_cols[2] as keyof typeof a]===options[options_cols[2] as keyof typeof a][i]) count++
-        })
-      }
-    })
-    box_2.forEach((ele, i) => {
-      if (ele.includes(2)) {
-        ans.forEach(a => {
-          if(a[options_cols[1] as keyof typeof a]===options[options_cols[1]][ele.indexOf(2)] && a[options_cols[2] as keyof typeof a]===options[options_cols[2]][i]) count++
-        })
-      }
-    })
-    box_3.forEach((ele, i) => {
-      if (ele.includes(2)) {
-        ans.forEach(a => {
-          if(a[options_cols[0] as keyof typeof a]===options[options_cols[0]][ele.indexOf(2)] && a[options_cols[1] as keyof typeof a]===options[options_cols[1]][i]) count++
-        })
+  const [confirmReset, setConfirmReset] = useState(false)
+  const [confirmEnd, setConfirmEnd] = useState(false)
+  //comapre ans by iterating over each box and matching with respective properties in ansArray
+  const [right, setRight] = useState(0)
+  const checkAns = (end: boolean = false) => {
+    let count = 0;
+    [box_1, box_2, box_3].forEach((box: number[][], k: number) => {
+      for (let i = 0; i < 4; i++) {
+        if (box[i].indexOf(2) != -1 && box[i].indexOf(2) == correctArray[k][i].indexOf(2)) count++
       }
     })
     setRight(count)
-    count==12 ? setAlert(2) : end ? setAlert(4) : count>=0 ? setAlert(1) : console.log('ok')
+    count == 12 ? setAlert(2) : end ? setAlert(4) : count >= 0 ? setAlert(1) : console.log('ok')
+  }
+
+  // feedback functionality
+  const feedback = () => {
+    [box_1, box_2, box_3].forEach((box, k) => {
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+          if (box[i][j] != correctArray[k][i][j] && box[i][j] != 0) {
+            box[i][j] = 4
+            k == 0 ? setBox1([...box]) : k == 1 ? setBox2([...box]) : setBox3([...box])
+          }
+        }
+      }
+    })
   }
   //check if all the boxes are marked either wrong or tick if yes checkAns on each box update
   useEffect(() => {
     let flag = true
-    box_1.forEach(ele=>{
-      if(!ele.includes(2)) flag = false
+    box_1.forEach(ele => {
+      if (!ele.includes(2)) flag = false
     })
-    box_2.forEach(ele=>{
-      if(!ele.includes(2)) flag = false
+    box_2.forEach(ele => {
+      if (!ele.includes(2)) flag = false
     })
-    box_3.forEach(ele=>{
-      if(!ele.includes(2)) flag = false
+    box_3.forEach(ele => {
+      if (!ele.includes(2)) flag = false
     })
-    if(flag)
+    if (flag)
       checkAns()
   }, [box_1, box_2, box_3])
-
-  const calculateScore = (tr:number) => {
+  const removeError = () => {
+    let flag = false;
+    [box_1, box_2, box_3].forEach((box, k) => {
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+          if (box[i][j] == 4) {
+            box[i][j] = 0
+            flag = true
+          }
+        }
+      }
+      if(flag) k == 0 ? setBox1([...box]) : k == 1 ? setBox2([...box_2]) : setBox3([...box])
+    })
+  }
+  const calculateScore = (tr: number) => {
     const penalty = 2
     const x = tr / 2
-    console.log(right,x,penalty)
-    return right*10 - (Math.abs(x-12))*penalty
+    return right * 10 - (Math.abs(x - 12)) * penalty
   }
   return (
     <>
@@ -177,9 +189,9 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
           {box_1.map((ele, i) => {
             return <>
               {ele.map((el, j) => {
-                return <button className="bg-white border-slate-300 rounded-none px-2 py-0 min-h-[2.5em]" onClick={() => handleBoxClick([i, j, 1])}>
+                return <button className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em]`} onClick={() => handleBoxClick([i, j, 1])}>
                   {(el === 2)
-                    ? <IoMdCheckmark size='1.5em' className='bg-green-400' color='white'/>
+                    ? <IoMdCheckmark size='1.5em' className='bg-green-400' color='white' />
                     : (el === 1)
                       ? <IoClose className='bg-red-400' color='white' size='1.5em' /> : ''}
                 </button>
@@ -192,7 +204,7 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
           {box_2.map((ele, i) => {
             return <>
               {ele.map((el, j) => {
-                return <button className="bg-white border-slate-300 rounded-none px-2 py-0 min-h-[2.5em]" onClick={() => handleBoxClick([i, j, 2])}>
+                return <button className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em]`} onClick={() => handleBoxClick([i, j, 2])}>
                   {(el === 2)
                     ? <IoMdCheckmark className='bg-green-400' color='white' size='1.5em' />
                     : (el === 1)
@@ -216,24 +228,25 @@ const Puzzle = ({ options, ans, setShowHints }: PuzzleProps) => {
           {box_3.map((ele, i) => {
             return <>
               {ele.map((el, j) => {
-                return <button className="bg-white border-slate-300 rounded-none px-2 py-0 min-h-[2.5em]" onClick={() => handleBoxClick([i, j, 3])}>
+                return <button className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em]`} onClick={() => handleBoxClick([i, j, 3])}>
                   {(el === 2)
-                    ? <IoMdCheckmark size='1.5em' className='bg-green-400' color='white'/>
+                    ? <IoMdCheckmark size='1.5em' className='bg-green-400' color='white' />
                     : (el === 1)
-                      ? <IoClose size='1.5em' className='bg-red-400' color='white'/> : ''}
+                      ? <IoClose size='1.5em' className='bg-red-400' color='white' /> : ''}
                 </button>
               })}
             </>
           })}
         </div>
       </div>
-      <div className='mt-10 flex justify-around w-[80%] items-center m-auto'>
-        <button className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500' onClick={()=>setConfirmEnd(true)}>End</button>
+      <div className='mt-10 flex justify-around w-full items-center m-auto'>
+        <button className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500' onClick={() => setConfirmEnd(true)}>End</button>
         <button className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500' onClick={() => setShowHints(prev => !prev)}>Hint</button>
         <button disabled={prevState.current.length === 0} onClick={undo} className={`${prevState.current.length === 0 ? 'hover:cursor-not-allowed' : ''} bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500`}>Undo</button>
-        <button onClick={()=>setConfirmReset(true)} className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500'>Start Over</button>
+        <button disabled={prevState.current.length === 0} onClick={feedback} className={`${prevState.current.length === 0 ? 'hover:cursor-not-allowed' : ''} bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500`}>Feedback</button>
+        <button onClick={() => setConfirmReset(true)} className='bg-white border-2 py-1.5 hover:bg-cyan-200 hover:text-slate-500 uppercase border-cyan-500'>Start Over</button>
       </div>
-      <AlertComp score={calculateScore(tries.current)} ans={ans} showAlert={alert == 1 || alert == 2 || alert == 3 || alert==4} status={alert} setShowAlert={setAlert} />
+      <AlertComp score={calculateScore(tries.current)} ans={ans} showAlert={alert == 1 || alert == 2 || alert == 3 || alert == 4} status={alert} setShowAlert={setAlert} />
       <ResetComp reset={reset} confirmReset={confirmReset} setConfirmReset={setConfirmReset} />
       <EndProblemConfirm checkAns={checkAns} confirmEnd={confirmEnd} setConfirmEnd={setConfirmEnd} />
     </>
