@@ -8,12 +8,12 @@ A Logic Puzzle Solver built with React, Vite, TypeScript, and Tailwind CSS. Puzz
 https://puzzle-builder-ten.vercel.app/
 ## Overview
 
-This web application allows users to solve logic puzzles with various stories. Puzzle data is dynamic and displayed in an interactive interface. Users can toggle hints, view the puzzle description, input their solutions, and check the answer.
+This web application allows users to solve logic puzzles with various stories. Puzzle data is dynamic and displayed in an interactive interface. Users can toggle hints, view the puzzle description, input their solutions, check the answer, and get feedback.
 
 ## Features
 
 - **Dynamic Puzzle Loading:** Fetch puzzle data based on the selected problem.
-- **Interactive Interface:** View puzzle descriptions, toggle hints, and input your solutions.
+- **Interactive Interface:** View puzzle descriptions, toggle hints, and input your solutions, get feedback.
 - **Built with React and TypeScript:** Utilizes modern web technologies for a robust and type-safe codebase.
 - **Vite framework:** used for better and fast dev experience.
 - **Styled with Tailwind CSS:** Responsive and visually appealing design.
