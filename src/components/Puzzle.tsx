@@ -108,6 +108,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
 
   // feedback functionality
   const feedback = () => {
+    tries.current += 10;
     [box_1, box_2, box_3].forEach((box, k) => {
       for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
@@ -134,6 +135,8 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
     if (flag)
       checkAns()
   }, [box_1, box_2, box_3])
+
+  // reset the feedback thing
   const removeError = () => {
     let flag = false;
     [box_1, box_2, box_3].forEach((box, k) => {
@@ -161,7 +164,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
         <div className="justify-center items-center text-lg font-semibold bg-slate-400 border-black flex flex-col">
           <div className="w-full flex justify-between items-stretch h-full">
             {options[options_cols[0]].map(ele => {
-              return <div style={{ writingMode: 'vertical-rl' }} className="rotate-180 py-2 text-base w-full border border-slate-500 text-slate-500 p-1 flex items-center justify-center bg-cyan-100">{ele}</div>
+              return <div style={{ writingMode: 'vertical-rl' }} className="rotate-180 py-2 text-base w-full border border-slate-500 text-slate-500 p-1 flex items-center justify-center bg-cyan-100">{correctCase(ele)}</div>
             })}
           </div>
           <p className="items-center flex text-white p-1.5">{correctCase(options_cols[0])}</p>
@@ -170,7 +173,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
         <div className="justify-center items-center text-lg font-semibold bg-cyan-100 border border-black flex flex-col">
           <div className="w-full flex justify-between items-stretch h-full">
             {options[options_cols[1]].map(ele => {
-              return <div style={{ writingMode: 'vertical-rl' }} className="rotate-180 min-h-[6.5em] text-base w-full border-r border-black text-white bg-slate-400 p-1 flex items-center justify-center">{ele}</div>
+              return <div style={{ writingMode: 'vertical-rl' }} className="rotate-180 min-h-[6.5em] text-base w-full border-r border-black text-white bg-slate-400 p-1 flex items-center justify-center">{correctCase(ele)}</div>
             })}
           </div>
           <p className="items-center flex text-slate-500 p-1.5">{correctCase(options_cols[1])}</p>
@@ -179,7 +182,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
         <div className="justify-center items-center text-lg font-semibold bg-slate-400 border-black flex">
           <div className="w-[74%] flex flex-col justify-between items-stretch h-full">
             {options[options_cols[2]].map(ele => {
-              return <div className="border text-sm border-black text-slate-500 p-1 flex items-center justify-center h-full bg-cyan-100">{ele}</div>
+              return <div className="border text-sm border-black text-slate-500 p-1 flex items-center justify-center h-full bg-cyan-100">{correctCase(ele)}</div>
             })}
           </div>
           <p style={{ writingMode: 'vertical-rl' }} className="w-[26%] items-center flex text-white rotate-180">{correctCase(options_cols[2])}</p>
@@ -218,7 +221,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
         <div className="justify-center border border-black items-center text-lg font-semibold bg-cyan-100 flex border-r border-r-black">
           <div className="w-[74%] flex flex-col justify-between items-stretch h-full">
             {options[options_cols[1]].map(ele => {
-              return <div className="border border-black text-base text-white p-1 flex items-center justify-center h-full bg-slate-400">{ele}</div>
+              return <div className="border border-black text-base text-white p-1 flex items-center justify-center h-full bg-slate-400">{correctCase(ele)}</div>
             })}
           </div>
           <p style={{ writingMode: 'vertical-rl' }} className="w-[26%] items-center flex font-semibold text-slate-500 rotate-180">{correctCase(options_cols[1])}</p>
