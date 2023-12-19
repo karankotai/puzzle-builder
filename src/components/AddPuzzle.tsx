@@ -90,8 +90,8 @@ const AddPuzzle = () => {
     const handleSubmit = async () => {
         setLoading(true)
         try {
-            const alreadyData = await axios.get('https://babablacksheep.onrender.com/puzzles')
-            await axios.post('https://babablacksheep.onrender.com/puzzles', { ...formObj, id: alreadyData.data.length + 1 })
+            const resposnse = await axios.post('https://babablacksheep.onrender.com/puzzles', { ...formObj })
+            console.log(resposnse)
             setLoading(false)
             setShowAlert(true)
         } catch (error) {
@@ -135,7 +135,7 @@ const AddPuzzle = () => {
         <div className='bg-cyan-100 min-h-screen pb-5'>
             <Link to='/'><IoMdHome className="fixed shadow-lg left-[2%] border border-black top-[3%] z-20 bg-white rounded-md" size='2.8em' color='#91ccd1' /></Link>
             <form onSubmit={validate}>
-                <div className='w-[45%] m-auto pt-5 flex flex-col gap-3'>
+                <div className='w-[75%] lg:w-[50%] m-auto pt-5 flex flex-col gap-3'>
                     <div className='border-t-cyan-500 border-t-8 rounded-xl bg-white p-8 w-full border-b'>
                         <h2 className='font-bold text-3xl pb-2'>Publish Your Own puzzle</h2>
                         <p>Enter the puzzle details to add puzzle to the site</p>
@@ -164,13 +164,13 @@ const AddPuzzle = () => {
                     </div>
                     <div className='bg-white flex flex-col gap-5 rounded-xl p-6'>
                         <label className='font-bold'>Enter Titles and Answer of the Puzzle<span className='text-red-500'>*</span></label>
-                        <table className='border-slate-400 border-2 w-full'>
+                        <table className='border-slate-400 border-2'>
                             <thead>
                                 <tr>
                                     <th></th>
                                     {cols.map((ele, i) => {
                                         return <th className='border border-black text-center'>
-                                            <input type='text' value={ele} required onChange={handleTableChange} name={`col${i}`} placeholder={`Title ${i + 1}`} className='text-center w-1/2' />
+                                            <input type='text' value={ele} required onChange={handleTableChange} name={`col${i}`} placeholder={`Title ${i + 1}`} className='text-center' />
                                         </th>
                                     })}
                                 </tr>
@@ -180,13 +180,13 @@ const AddPuzzle = () => {
                                     return <tr>
                                         <td className='p-1 px-2 text-center border border-slate-500 font-bold'>{i + 1}</td>
                                         <td className='text-center border border-slate-500'>
-                                            <input type="text" className='text-center text-[0.95rem]' required value={ele[0]} onChange={(e) => handleTableChange(e, i, 0)} placeholder='Correct Answer' />
+                                            <input type="text" className='text-center text-[0.95rem] w-full' required value={ele[0]} onChange={(e) => handleTableChange(e, i, 0)} placeholder='Correct Answer' />
                                         </td>
                                         <td className='text-center border border-slate-500'>
-                                            <input type="text" className='text-center text-[0.95rem]' required placeholder='Correct Answer' value={ele[1]} onChange={(e) => handleTableChange(e, i, 1)} />
+                                            <input type="text" className='text-center text-[0.95rem] w-full' required placeholder='Correct Answer' value={ele[1]} onChange={(e) => handleTableChange(e, i, 1)} />
                                         </td>
                                         <td className='text-center border border-slate-500'>
-                                            <input type="text" className='text-center text-[0.95rem]' required placeholder='Correct Answer' value={ele[2]} onChange={(e) => handleTableChange(e, i, 2)} />
+                                            <input type="text" className='text-center text-[0.95rem] w-full' required placeholder='Correct Answer' value={ele[2]} onChange={(e) => handleTableChange(e, i, 2)} />
                                         </td>
                                     </tr>
                                 })}
