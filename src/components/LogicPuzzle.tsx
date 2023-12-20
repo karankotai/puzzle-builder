@@ -61,10 +61,11 @@ const LogicPuzzle = ({ latest }: { latest: boolean }) => {
           if (!latest) {
             const randomNum = Math.round(Math.random() * puzzles.length)
             setProblem(puzzles[randomNum])
+            setLoading(false)
           }else{
             setProblem(puzzles[puzzles.length-1])
+            setLoading(false)
           }
-          setLoading(false)
         }
       } catch (error) {
         console.error('Error fetching JSON data:', error);
