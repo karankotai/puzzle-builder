@@ -164,7 +164,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
         <div className="justify-center items-center text-lg font-semibold bg-slate-400 border-black flex flex-col">
           <div className="w-full flex justify-between items-stretch h-full">
             {options[options_cols[0]].map(ele => {
-              return <div style={{ writingMode: 'vertical-rl' }} className="rotate-180 py-2 text-base w-full border border-slate-500 text-slate-500 p-1 flex items-center justify-center bg-cyan-100">{correctCase(ele)}</div>
+              return <div key={ele} style={{ writingMode: 'vertical-rl' }} className="rotate-180 py-2 text-base w-full border border-slate-500 text-slate-500 p-1 flex items-center justify-center bg-cyan-100">{correctCase(ele)}</div>
             })}
           </div>
           <p className="items-center flex text-white p-1.5">{correctCase(options_cols[0])}</p>
@@ -173,7 +173,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
         <div className="justify-center items-center text-lg font-semibold bg-cyan-100 border border-black flex flex-col">
           <div className="w-full flex justify-between items-stretch h-full">
             {options[options_cols[1]].map(ele => {
-              return <div style={{ writingMode: 'vertical-rl' }} className="rotate-180 min-h-[6.5em] text-base w-full border-r border-black text-white bg-slate-400 p-1 flex items-center justify-center">{correctCase(ele)}</div>
+              return <div key={ele} style={{ writingMode: 'vertical-rl' }} className="rotate-180 min-h-[6.5em] text-base w-full border-r border-black text-white bg-slate-400 p-1 flex items-center justify-center">{correctCase(ele)}</div>
             })}
           </div>
           <p className="items-center flex text-slate-500 p-1.5">{correctCase(options_cols[1])}</p>
@@ -182,7 +182,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
         <div className="justify-center items-center text-lg font-semibold bg-slate-400 border-black flex">
           <div className="w-[74%] flex flex-col justify-between items-stretch h-full">
             {options[options_cols[2]].map(ele => {
-              return <div className="border text-sm border-black text-slate-500 p-1 flex items-center justify-center h-full bg-cyan-100">{correctCase(ele)}</div>
+              return <div key={ele} className="border text-sm border-black text-slate-500 p-1 flex items-center justify-center h-full bg-cyan-100">{correctCase(ele)}</div>
             })}
           </div>
           <p style={{ writingMode: 'vertical-rl' }} className="w-[26%] items-center flex text-white rotate-180">{correctCase(options_cols[2])}</p>
@@ -192,11 +192,11 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
           {box_1.map((ele, i) => {
             return <>
               {ele.map((el, j) => {
-                return <button className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em]`} onClick={() => handleBoxClick([i, j, 1])}>
+                return <button key={`c1${i}${j}`} className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em] max-w-[2.5em]`} onClick={() => handleBoxClick([i, j, 1])}>
                   {(el === 2)
                     ? <IoMdCheckmark size='1.5em' className='bg-green-400' color='white' />
                     : (el === 1)
-                      ? <IoClose className='bg-red-400' color='white' size='1.5em' /> : ''}
+                      ? <IoClose className='bg-red-400' color='white' size='1.5em' /> : <></> }
                 </button>
               })}
             </>
@@ -207,11 +207,11 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
           {box_2.map((ele, i) => {
             return <>
               {ele.map((el, j) => {
-                return <button className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em]`} onClick={() => handleBoxClick([i, j, 2])}>
+                return <button key={`c2${i}${j}`} className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em] max-w-[2.5em]`} onClick={() => handleBoxClick([i, j, 2])}>
                   {(el === 2)
                     ? <IoMdCheckmark className='bg-green-400' color='white' size='1.5em' />
                     : (el === 1)
-                      ? <IoClose className='bg-red-400' color='white' size='1.5em' /> : ''}
+                      ? <IoClose className='bg-red-400' color='white' size='1.5em' /> : <></>}
                 </button>
               })}
             </>
@@ -221,7 +221,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
         <div className="justify-center border border-black items-center text-lg font-semibold bg-cyan-100 flex border-r border-r-black">
           <div className="w-[74%] flex flex-col justify-between items-stretch h-full">
             {options[options_cols[1]].map(ele => {
-              return <div className="border border-black text-base text-white p-1 flex items-center justify-center h-full bg-slate-400">{correctCase(ele)}</div>
+              return <div key={ele} className="border border-black text-base text-white p-1 flex items-center justify-center h-full bg-slate-400">{correctCase(ele)}</div>
             })}
           </div>
           <p style={{ writingMode: 'vertical-rl' }} className="w-[26%] items-center flex font-semibold text-slate-500 rotate-180">{correctCase(options_cols[1])}</p>
@@ -231,11 +231,11 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
           {box_3.map((ele, i) => {
             return <>
               {ele.map((el, j) => {
-                return <button className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em]`} onClick={() => handleBoxClick([i, j, 3])}>
+                return <button key={`c3${i}${j}`} className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em] max-w-[2.5em]`} onClick={() => handleBoxClick([i, j, 3])}>
                   {(el === 2)
                     ? <IoMdCheckmark size='1.5em' className='bg-green-400' color='white' />
                     : (el === 1)
-                      ? <IoClose size='1.5em' className='bg-red-400' color='white' /> : ''}
+                      ? <IoClose size='1.5em' className='bg-red-400' color='white' /> : <></>}
                 </button>
               })}
             </>

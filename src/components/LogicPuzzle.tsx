@@ -24,7 +24,7 @@ const LogicPuzzle = ({ latest }: { latest: boolean }) => {
   const [errorFetching, setErrorFetching] = useState(false)
   const [problem, setProblem] = useState<Problem>({ title: "", desc: "", hints: [], options: {}, ans: [] })
   const calculateCorrect = () => {
-    const options_cols = Object.keys(problem?.options)
+    const options_cols = problem?.options ? Object.keys(problem?.options) : []
     if (options_cols.length > 0) {
       const correctBox1: number[][] = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
       const correctBox2: number[][] = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
@@ -53,7 +53,7 @@ const LogicPuzzle = ({ latest }: { latest: boolean }) => {
       setLoading(true)
       try {
         const response = await axios.get(`https://nice-tan-butterfly-sari.cyclic.app/puzzle/allPuzzle`)
-        const puzzles = await response?.data?.Puzzles
+        const puzzles = await response?.data?.Puzzles;
         if (!puzzles || puzzles.length == 0) {
           setLoading(false)
           setErrorFetching(true)
@@ -85,17 +85,17 @@ const LogicPuzzle = ({ latest }: { latest: boolean }) => {
       <Link to='/'><IoMdHome className="fixed shadow-lg left-[2%] border border-black top-[3%] z-20 bg-white rounded-md" size='2.8em' color='#91ccd1' /></Link>
       <div className="p-[2em] items-center text-center bg-cyan-50 border-[10px] h-[100vh] border-slate-400 flex">
         <div className='w-[45%] h-full pt-[6%] mr-5 pr-8 border-r-2 border-black'>
-          <h2 className="text-cyan-300 m-4 text-3xl font-bold">{problem.title}</h2>
-          <p className='px-[4%]'>{problem.desc}</p>
+          <h2 className="text-cyan-300 m-4 text-3xl font-bold">{problem?.title}</h2>
+          <p className='px-[4%]'>{problem?.desc}</p>
           <hr className="border-1 my-5 border-black" />
           <p onClick={() => setShowHints(!showHints)} className="text-center text-white p-1 font-bold text-lg cursor-pointer bg-slate-400">--Hints--</p>
           <ul className="list-disc text-left m-auto mt-2 w-fit px-10" style={{ display: showHints ? 'block' : 'none' }}>
-            {problem.hints.map(ele => <li>{ele}</li>)}
+            {problem?.hints.map(ele => <li key={ele}>{ele}</li>)}
           </ul>
           <hr className="border-1 my-5 border-black" />
         </div>
-        {problem.ans.length > 0 && <div className='m-auto'>
-          <Puzzle options={problem.options} correctArray={ansBoxes} setShowHints={setShowHints} ans={problem.ans} />
+        {problem?.ans.length > 0 && <div className='m-auto'>
+          <Puzzle options={problem?.options} correctArray={ansBoxes} setShowHints={setShowHints} ans={problem?.ans} />
         </div>}
       </div>
       {errorFetching && <ErrorAlert showError={errorFetching} setShowError={setErrorFetching} />}
