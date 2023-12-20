@@ -7,7 +7,8 @@ const App = () => {
     <>
     <Routes>
       <Route path="/" element={<HomePage />}/> 
-      <Route path="/problem" element={<LogicPuzzle />}/>
+      <Route path="/problem" element={<LogicPuzzle latest={false} />}/>
+      <Route path="/problem/latest" element={<LogicPuzzle latest={true} />}/>
       <Route path="/addPuzzle" element={<AddPuzzle />}/>
     </Routes>
     </>

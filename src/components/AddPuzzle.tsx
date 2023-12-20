@@ -4,6 +4,7 @@ import { ImSpinner2 } from 'react-icons/im';
 import { IoMdHome } from 'react-icons/io'
 import { Link } from 'react-router-dom'
 import SuccessAlert from './SuccessAlert';
+import ErrorAlert from './ErrorAlert';
 
 interface Problem {
     title: string;
@@ -22,7 +23,7 @@ const AddPuzzle = () => {
         return { title: "", desc: "", hints: [""], options: {}, ans: [] }
     }
     const [cols, setCols] = useState(["", "", ""])
-    const [rows, setRows] = useState([["", "", ""], ["", "", ""], ["", "", ""]])
+    const [rows, setRows] = useState([["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""]])
     const [formObj, setFormObj] = useState<Problem>(createEmptyObj())
     const [errorObj, setErrorObj] = useState({ title: false, desc: false, hints: [false], table: false })
     const validate = (e: { preventDefault: () => void; }) => {
@@ -53,7 +54,7 @@ const AddPuzzle = () => {
         })
         if (flag) return;
         flag = false;
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 3; j++) {
                 if (rows[i][j].length == 0) {
                     setErrorObj({ ...errorObj, table: true })
@@ -63,9 +64,9 @@ const AddPuzzle = () => {
             }
             if (flag) return;
         }
-        makeOptionAns()
+        makeOptionAns(e)
     }
-    const makeOptionAns = () => {
+    const makeOptionAns = (e: { preventDefault: () => void; }) => {
         setErrorObj({ title: false, desc: false, hints: [false], table: false })
         const options = {
             [cols[0]]: rows.map((ele) => {
@@ -83,20 +84,28 @@ const AddPuzzle = () => {
         })
         console.log(options, ans)
         setFormObj({ ...formObj, options, ans })
-        handleSubmit()
+        handleSubmit(e, options, ans)
     }
     const [loading, setLoading] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
-    const handleSubmit = async () => {
+    const [showError, setShowError] = useState(false)
+    const handleSubmit = async (e: { preventDefault: () => void; }, options: { [key: string]: string[] }, ans: { [key: string]: string }[]) => {
         setLoading(true)
         try {
-            const resposnse = await axios.post('https://babablacksheep.onrender.com/puzzles', { ...formObj })
-            console.log(resposnse)
-            setLoading(false)
-            setShowAlert(true)
+            const response = await axios.post('https://nice-tan-butterfly-sari.cyclic.app/puzzle/add', { ...formObj, options, ans })
+            if (response.status === 200) {
+                setLoading(false)
+                setShowAlert(true)
+                handleReset(e)
+            } else {
+                console.log(response.data)
+                setLoading(false)
+                setShowError(true)
+            }
         } catch (error) {
             console.log(error)
             setLoading(false)
+            setShowError(true)
         }
     }
     const handleInput = (e: { target: { name: string | (string | number)[]; value: string; }; }) => {
@@ -121,6 +130,8 @@ const AddPuzzle = () => {
     const handleReset = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
         setFormObj(createEmptyObj())
+        setCols(["", "", ""])
+        setRows([["", "", ""], ["", "", ""], ["", "", ""]])
     }
     const handleTableChange = (e: ChangeEvent<HTMLInputElement>, i: number = 0, j: number = 0) => {
         if (e.target.name.includes("col")) {
@@ -131,6 +142,7 @@ const AddPuzzle = () => {
             setRows([...rows])
         }
     }
+
     return (
         <div className='bg-cyan-100 min-h-screen pb-5'>
             <Link to='/'><IoMdHome className="fixed shadow-lg left-[2%] border border-black top-[3%] z-20 bg-white rounded-md" size='2.8em' color='#91ccd1' /></Link>
@@ -195,12 +207,13 @@ const AddPuzzle = () => {
                         {errorObj["table"] && <p className='text-red-500 text-sm text-right'>**Please fill the full table**</p>}
                     </div>
                     <div className='bg-white flex flex-col items-center rounded-xl p-6'>
-                        <button className='bg-cyan-500 font-bold w-1/2 text-white border border-black' onClick={validate} disabled={loading}>{loading ? <ImSpinner2 className="animate-spin" color='#91ccd1' size='1.5em' /> : "Submit"}</button>
+                        <button className='bg-cyan-500 text-center font-bold w-1/2 text-white border border-black' onClick={validate} disabled={loading}>{loading ? <ImSpinner2 className="animate-spin m-auto" color='#91ccd1' size='1.5em' /> : "Submit"}</button>
                     </div>
                     <button className='bg-transparent underline ml-auto' onClick={handleReset}>Clear Form</button>
                 </div>
             </form>
-            {showAlert && <SuccessAlert showAlert={showAlert} setShowAlert={setShowAlert}/>}
+            {showAlert && <SuccessAlert showAlert={showAlert} setShowAlert={setShowAlert} />}
+            {showError && <ErrorAlert showError={showError} setShowError={setShowError} />}
         </div >
     )
 }

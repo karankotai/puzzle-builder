@@ -158,7 +158,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
   }
   return (
     <>
-      <div className="w-[35vw] gap-1 grid grid-cols-[1fr,1fr,1fr]">
+      <div className="w-[100%] gap-1 grid grid-cols-[1fr,1fr,1fr]">
         <div></div>
         {/* top heading for 1st box */}
         <div className="justify-center items-center text-lg font-semibold bg-slate-400 border-black flex flex-col">

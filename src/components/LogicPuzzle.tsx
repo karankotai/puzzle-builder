@@ -4,6 +4,7 @@ import { IoMdHome } from 'react-icons/io'
 import { ImSpinner2 } from "react-icons/im";
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import ErrorAlert from './ErrorAlert';
 
 interface Problem {
   title: string;
@@ -17,9 +18,10 @@ interface Problem {
   }[];
 }
 
-const LogicPuzzle = () => {
+const LogicPuzzle = ({ latest }: { latest: boolean }) => {
   const [loading, setLoading] = useState(false)
   const [showHints, setShowHints] = useState(false)
+  const [errorFetching, setErrorFetching] = useState(false)
   const [problem, setProblem] = useState<Problem>({ title: "", desc: "", hints: [], options: {}, ans: [] })
   const calculateCorrect = () => {
     const options_cols = Object.keys(problem?.options)
@@ -46,18 +48,28 @@ const LogicPuzzle = () => {
   }
   const [ansBoxes, setAnsBoxes] = useState<number[][][]>([])
   useEffect(() => {
+    setErrorFetching(false)
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await axios.get(`https://babablacksheep.onrender.com/puzzles`)
-        const puzzles = response.data
-        const randomNum = Math.round(Math.random() * puzzles.length)
-        console.log(puzzles)
-        setProblem(puzzles[randomNum])
-        setLoading(false)
+        const response = await axios.get(`https://nice-tan-butterfly-sari.cyclic.app/puzzle/allPuzzle`)
+        const puzzles = await response?.data?.Puzzles
+        if (!puzzles || puzzles.length == 0) {
+          setLoading(false)
+          setErrorFetching(true)
+        } else {
+          if (!latest) {
+            const randomNum = Math.round(Math.random() * puzzles.length)
+            setProblem(puzzles[randomNum])
+          }else{
+            setProblem(puzzles[puzzles.length-1])
+          }
+          setLoading(false)
+        }
       } catch (error) {
         console.error('Error fetching JSON data:', error);
         setLoading(false)
+        setErrorFetching(true)
       }
     };
     fetchData();
@@ -86,6 +98,7 @@ const LogicPuzzle = () => {
           <Puzzle options={problem.options} correctArray={ansBoxes} setShowHints={setShowHints} ans={problem.ans} />
         </div>}
       </div>
+      {errorFetching && <ErrorAlert showError={errorFetching} setShowError={setErrorFetching} />}
     </div>
   )
 }
