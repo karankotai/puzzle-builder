@@ -148,7 +148,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
           }
         }
       }
-      if(flag) k == 0 ? setBox1([...box]) : k == 1 ? setBox2([...box_2]) : setBox3([...box])
+      if (flag) k == 0 ? setBox1([...box]) : k == 1 ? setBox2([...box]) : setBox3([...box])
     })
   }
   const calculateScore = (tr: number) => {
@@ -161,7 +161,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
       <div className="w-[100%] gap-1 grid grid-cols-[1fr,1fr,1fr]">
         <div></div>
         {/* top heading for 1st box */}
-        <div className="justify-center items-center text-lg font-semibold bg-slate-400 border-black flex flex-col">
+        <div className="justify-center items-center text-lg font-semibold max-w-[160px] bg-slate-400 border-black flex flex-col">
           <div className="w-full flex justify-between items-stretch h-full">
             {options[options_cols[0]].map(ele => {
               return <div key={ele} style={{ writingMode: 'vertical-rl' }} className="rotate-180 py-2 text-base w-full border border-slate-500 text-slate-500 p-1 flex items-center justify-center bg-cyan-100">{correctCase(ele)}</div>
@@ -170,7 +170,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
           <p className="items-center flex text-white p-1.5">{correctCase(options_cols[0])}</p>
         </div>
         {/* top heading for 2nd box */}
-        <div className="justify-center items-center text-lg font-semibold bg-cyan-100 border border-black flex flex-col">
+        <div className="justify-center max-w-[160px] items-center text-lg font-semibold bg-cyan-100 border border-black flex flex-col">
           <div className="w-full flex justify-between items-stretch h-full">
             {options[options_cols[1]].map(ele => {
               return <div key={ele} style={{ writingMode: 'vertical-rl' }} className="rotate-180 min-h-[6.5em] text-base w-full border-r border-black text-white bg-slate-400 p-1 flex items-center justify-center">{correctCase(ele)}</div>
@@ -188,15 +188,16 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
           <p style={{ writingMode: 'vertical-rl' }} className="w-[26%] items-center flex text-white rotate-180">{correctCase(options_cols[2])}</p>
         </div>
         {/* 1st box */}
-        <div className='border grid grid-cols-4 border-black'>
+        <div className='border grid grid-cols-4 border-black max-w-[160px]'>
           {box_1.map((ele, i) => {
             return <>
               {ele.map((el, j) => {
+                console.log(el,i,j)
                 return <button key={`c1${i}${j}`} className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em] max-w-[2.5em]`} onClick={() => handleBoxClick([i, j, 1])}>
                   {(el === 2)
                     ? <IoMdCheckmark size='1.5em' className='bg-green-400' color='white' />
                     : (el === 1)
-                      ? <IoClose className='bg-red-400' color='white' size='1.5em' /> : <></> }
+                      ? <IoClose className='bg-red-400' color='white' size='1.5em' /> : ""}
                 </button>
               })}
             </>
