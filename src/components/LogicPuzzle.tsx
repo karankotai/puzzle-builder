@@ -55,9 +55,7 @@ const LogicPuzzle = ({ latest }: { latest: boolean }) => {
       try {
         const response = await axios.get(`https://nice-tan-butterfly-sari.cyclic.app/puzzle/allPuzzle`)
         const puzzles = await response?.data?.Puzzles;
-        console.log(puzzles)
         if (!puzzles || puzzles.length == 0) {
-          console.log('here')
           setLoading(false)
           setErrorFetching(true)
         } else {
