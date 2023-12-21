@@ -103,7 +103,7 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
       }
     })
     setRight(count)
-    count == 12 ? setAlert(2) : end ? setAlert(4) : count >= 0 ? setAlert(1) : console.log('ok')
+    count == 12 ? setAlert(2) : end ? setAlert(4) : count >= 0 ? setAlert(1) : setAlert(0)
   }
 
   // feedback functionality
@@ -192,7 +192,6 @@ const Puzzle = ({ options, ans, correctArray, setShowHints }: PuzzleProps) => {
           {box_1.map((ele, i) => {
             return <>
               {ele.map((el, j) => {
-                console.log(el,i,j)
                 return <button key={`c1${i}${j}`} className={`${el == 4 ? 'border-red-500 bg-red-200' : 'bg-white border-slate-300'} rounded-none px-2 py-0 min-h-[2.5em] max-w-[2.5em]`} onClick={() => handleBoxClick([i, j, 1])}>
                   {(el === 2)
                     ? <IoMdCheckmark size='1.5em' className='bg-green-400' color='white' />

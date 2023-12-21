@@ -5,10 +5,11 @@ import { BsExclamationCircle } from "react-icons/bs";
 
 interface ErrorCompProps {
   showError: boolean,
+  error: string,
   setShowError: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ErrorAlert = ({ showError, setShowError }: ErrorCompProps) => {
+const ErrorAlert = ({error, showError, setShowError }: ErrorCompProps) => {
   const cancelButtonRef = useRef(null)
   return (
     <Transition.Root show={showError} as={Fragment}>
@@ -48,7 +49,7 @@ const ErrorAlert = ({ showError, setShowError }: ErrorCompProps) => {
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-white">
-                          Server Error. Please try again Later!!
+                          {error}
                         </p>
                       </div>
                     </div>

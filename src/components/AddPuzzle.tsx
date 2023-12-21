@@ -89,6 +89,7 @@ const AddPuzzle = () => {
     const [loading, setLoading] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
     const [showError, setShowError] = useState(false)
+    const [error, setError] = useState("Server Error. Please try again Later!!")
     const handleSubmit = async (e: { preventDefault: () => void; }, options: { [key: string]: string[] }, ans: { [key: string]: string }[]) => {
         setLoading(true)
         try {
@@ -98,12 +99,16 @@ const AddPuzzle = () => {
                 setShowAlert(true)
                 handleReset(e)
             } else {
-                console.log(response.data)
+                if(axios.isAxiosError(response) && response?.response){
+                    setError(response?.response.data)
+                }
                 setLoading(false)
                 setShowError(true)
             }
         } catch (error) {
-            console.log(error)
+            if(axios.isAxiosError(error) && error?.response){
+                setError(error?.response.data)
+            }
             setLoading(false)
             setShowError(true)
         }
@@ -147,7 +152,7 @@ const AddPuzzle = () => {
         <div className='bg-cyan-100 min-h-screen pb-5'>
             <Link to='/'><IoMdHome className="fixed shadow-lg left-[2%] border border-black top-[3%] z-20 bg-white rounded-md" size='2.8em' color='#91ccd1' /></Link>
             <form onSubmit={validate}>
-                <div className='w-[75%] lg:w-[50%] m-auto pt-5 flex flex-col gap-3'>
+                <div className='w-[75%] lg:w-fit m-auto pt-5 flex flex-col gap-3'>
                     <div className='border-t-cyan-500 border-t-8 rounded-xl bg-white p-8 w-full border-b'>
                         <h2 className='font-bold text-3xl pb-2'>Publish Your Own puzzle</h2>
                         <p>Enter the puzzle details to add puzzle to the site</p>
@@ -213,7 +218,7 @@ const AddPuzzle = () => {
                 </div>
             </form>
             {showAlert && <SuccessAlert showAlert={showAlert} setShowAlert={setShowAlert} />}
-            {showError && <ErrorAlert showError={showError} setShowError={setShowError} />}
+            {showError && <ErrorAlert showError={showError} error={error} setShowError={setShowError} />}
         </div >
     )
 }

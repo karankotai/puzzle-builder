@@ -99,7 +99,7 @@ const LogicPuzzle = ({ latest }: { latest: boolean }) => {
           <Puzzle options={problem?.options} correctArray={ansBoxes} setShowHints={setShowHints} ans={problem?.ans} />
         </div>}
       </div>
-      {errorFetching && <ErrorAlert showError={errorFetching} setShowError={setErrorFetching} />}
+      {errorFetching && <ErrorAlert error='Server Error. Please try again Later!!' showError={errorFetching} setShowError={setErrorFetching} />}
     </div>
   )
 }
