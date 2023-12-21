@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import ErrorAlert from './ErrorAlert';
 
 interface Problem {
+  _id: string,
   title: string;
   desc: string;
   hints: string[];
@@ -22,7 +23,7 @@ const LogicPuzzle = ({ latest }: { latest: boolean }) => {
   const [loading, setLoading] = useState(false)
   const [showHints, setShowHints] = useState(false)
   const [errorFetching, setErrorFetching] = useState(false)
-  const [problem, setProblem] = useState<Problem>({ title: "", desc: "", hints: [], options: {}, ans: [] })
+  const [problem, setProblem] = useState<Problem>({ _id: "", title: "", desc: "", hints: [], options: {}, ans: [] })
   const calculateCorrect = () => {
     const options_cols = problem?.options ? Object.keys(problem?.options) : []
     if (options_cols.length > 0) {
@@ -54,16 +55,18 @@ const LogicPuzzle = ({ latest }: { latest: boolean }) => {
       try {
         const response = await axios.get(`https://nice-tan-butterfly-sari.cyclic.app/puzzle/allPuzzle`)
         const puzzles = await response?.data?.Puzzles;
+        console.log(puzzles)
         if (!puzzles || puzzles.length == 0) {
+          console.log('here')
           setLoading(false)
           setErrorFetching(true)
         } else {
           if (!latest) {
-            const randomNum = Math.round(Math.random() * puzzles.length)
+            const randomNum = Math.floor(Math.random() * puzzles.length)
             setProblem(puzzles[randomNum])
             setLoading(false)
-          }else{
-            setProblem(puzzles[puzzles.length-1])
+          } else {
+            setProblem(puzzles[puzzles.length - 1])
             setLoading(false)
           }
         }
