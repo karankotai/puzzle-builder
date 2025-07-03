@@ -53,7 +53,7 @@ const LogicPuzzle = ({ latest }: { latest: boolean }) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await axios.get(`https://tryingre.onrender.com/puzzles/allPuzzle`)
+        const response = await axios.get(`https://tryingre.onrender.com/puzzles`)
         const puzzles = await response?.data?.Puzzles;
         if (!puzzles || puzzles.length == 0) {
           setLoading(false)
